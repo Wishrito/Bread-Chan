@@ -17,10 +17,8 @@ from discord.ext import commands
 from discord.gateway import DiscordWebSocket, _log
 from discord.permissions import *
 
-import utils.ClassModule as ClassModule
-import TasksModule
-from utils.ClassModule import SensitveClass
-
+from utils.classModule import SensitveClass
+from utils.ui import SayModal
 
 # Fonction pour charger les cogs
 async def load_cogs(bot: commands.Bot):
@@ -110,7 +108,6 @@ class BreadChanClient(commands.Bot):
         super().__init__(command_prefix='!', intents=intents)
 
     async def setup_hook(self):
-        await self.tree.set_translator(ClassModule.BreadChan_Translator())
         await self.tree.sync(guild=support_guild)
         await self.tree.sync()
 
@@ -145,7 +142,7 @@ async def spotify_track(interaction: discord.Interaction):
 @app_commands.default_permissions(manage_guild=True)
 async def say(interaction: discord.Interaction, message: discord.Message):
     if interaction.channel and interaction.channel.type == ChannelType.text:
-        await interaction.response.send_modal(ClassModule.SayModal(message))
+        await interaction.response.send_modal(SayModal(message))
         await interaction.channel.typing()
 
 @app_commands.context_menu(name="Profil")
