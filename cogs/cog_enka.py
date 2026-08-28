@@ -1,3 +1,4 @@
+from utils.class_module import BreadChanClient
 import discord
 import enka
 import enka.enums
@@ -30,11 +31,11 @@ class EnkaGroup(app_commands.Group):
 
 
 class EnkaCog(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: BreadChanClient):
         self.client = bot
         self.enka_group = EnkaGroup()
         self.client.tree.add_command(self.enka_group)
 
 
-async def setup(bot: commands.Bot):
+async def setup(bot: BreadChanClient):
     await bot.add_cog(EnkaCog(bot))

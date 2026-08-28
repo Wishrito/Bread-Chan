@@ -1,3 +1,4 @@
+from utils.class_module import BreadChanClient
 import datetime as dat
 from typing import Optional
 
@@ -7,7 +8,7 @@ from discord.ext import commands
 
 
 class EventsCog(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: BreadChanClient):
         self.client = bot
 
     @commands.Cog.listener()
@@ -34,9 +35,10 @@ class EventsCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
+        assert self.client.user
         print(
             f"connecté en tant que {self.client.user.name} ({self.client.user.id})")
 
 
-async def setup(bot: commands.Bot):
+async def setup(bot: BreadChanClient):
     await bot.add_cog(EventsCog(bot))

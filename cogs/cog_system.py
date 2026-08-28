@@ -1,3 +1,4 @@
+from utils.class_module import BreadChanClient
 import datetime as dat
 import sys
 from typing import Optional
@@ -6,21 +7,21 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-SUPPORT_GUILD_ID = 1181845184288411688
-support_guild = discord.Object(id=SUPPORT_GUILD_ID, type=discord.Guild)
-
 
 class SystemCog(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+
+    def __init__(self, bot: BreadChanClient):
         self.client = bot
+
     
-    @app_commands.guilds(support_guild)
+    
     @app_commands.command(name="sync", description="syncronise les commandes")
     async def sync(self, interaction: discord.Interaction):
+        
         output = "commandes syncronisées avec succès !"
         try:
             await self.client.tree.sync()
-            await self.client.tree.sync(guild=support_guild)
+            await self.client.tree.sync(guild=self.client.support_guild)
         except Exception as e:
             output = e
         await interaction.response.send_message(output, ephemeral=True)
@@ -77,6 +78,8 @@ class SystemCog(commands.Cog):
             msg = f"commande ``{command_help}`` introuvable. veuillez réessayer."
         await interaction.response.send_message(msg, ephemeral=ephemeral)
 
+    async def cog_load(self):
+        self.sync._guild_ids = [self.client.support_guild.id]
 
-async def setup(bot: commands.Bot):
+async def setup(bot: BreadChanClient):
     await bot.add_cog(SystemCog(bot))
